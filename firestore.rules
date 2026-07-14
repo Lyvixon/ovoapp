@@ -1,0 +1,9 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{email} {
+      allow read: if true;
+      allow write: if false; // Only allow server-side admin writes (e.g. Admin SDK or Server integrations)
+    }
+  }
+}
