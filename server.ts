@@ -1,30 +1,32 @@
-import express from "express";
-import path from "path";
-import { createServer as createViteServer } from "vite";
-import app from "./src/serverApp";
-
-const PORT = 3000;
-
-async function startServer() {
-  // Vite middleware for development
-  if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), 'dist');
-    
-    app.use(express.static(distPath));
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
-    });
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User account information and active subscription plan",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "User's email address"
+        },
+        "plano": {
+          "type": "string",
+          "enum": ["basic", "premium"],
+          "description": "The active subscription plan for this user"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the user account was created or activated"
+        }
+      },
+      "required": ["email", "plano"]
+    }
+  },
+  "firestore": {
+    "users/{email}": {
+      "schema": "User",
+      "description": "Collection of registered users and their active plans indexed by email"
+    }
   }
-
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
 }
-
-startServer();

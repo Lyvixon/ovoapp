@@ -1,26 +1,9 @@
-{
-  "compilerOptions": {
-    "target": "ES2022",
-    "experimentalDecorators": true,
-    "useDefineForClassFields": false,
-    "module": "ESNext",
-    "lib": [
-      "ES2022",
-      "DOM",
-      "DOM.Iterable"
-    ],
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "allowJs": true,
-    "jsx": "react-jsx",
-    "paths": {
-      "@/*": [
-        "./*"
-      ]
-    },
-    "allowImportingTsExtensions": true,
-    "noEmit": true
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{email} {
+      allow read: if true;
+      allow write: if false; // Only allow server-side admin writes (e.g. Admin SDK or Server integrations)
+    }
   }
 }
